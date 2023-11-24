@@ -1,0 +1,91 @@
+name: deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment_name:
+        type: string
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # environment: ${{ inputs.environment_name }}
+    # timeout-minutes: 7
+    # env:
+    #   APP: ${{ vars.APP }}
+    #   ENV: ${{ vars.ENV }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: yarn
+          cache-dependency-path: ./yarn.lock
+      - name: Install dependencies
+        run: yarn
+      - name: Run unit tests
+        run: npm run test:unit
+      - name: Compile
+        run: npm run build
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Deploy to S3 bucket
+        run: |
+          aws s3 sync ./dist/ s3://${{ vars.S3_BUCKET }} --exclude=*health --exclude=*.html --cache-control=max-age=31536000,public
+          aws s3 sync ./dist/ s3://${{ vars.S3_BUCKET }} --exclude=* --include=*.html --cache-control=no-cache
+          aws s3 sync ./dist/ s3://${{ vars.S3_BUCKET }} --exclude=* --include=*health --cache-control=no-cache --content-type=application/json
+      - name: Invalidate CloudFront distribution
+        run: aws cloudfront create-invalidation --distribution-id=${{ vars.DISTRIBUTION_ID }} --paths=/*
+
+  notify:
+    name: Notify Slack channel
+    needs: deploy
+    if: always() && !cancelled()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # - name: Dump GitHub context
+      #   env:
+      #     GITHUB_CONTEXT: ${{ toJson(github) }}
+      #   run: echo "$GITHUB_CONTEXT"
+
+      - name: Set outputs
+        id: vars
+        run: |
+          {
+            echo "sha_short=$(git rev-parse --short HEAD)"
+            echo "subject=$(git log --format=%s -n 1 HEAD)"
+          } >> $GITHUB_OUTPUT
+
+      - name: Notify Slack channel
+        id: slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          channel-id: ${{ vars.FE_NOTIFICATION_CHANNEL_ID }}
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ needs.deploy.result == 'success' && ':white_check_mark:' || ':no_entry:' }} <${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }} | ${{ github.workflow }} #${{github.run_number}}> ${{ needs.deploy.result == 'success' && '*succeeded*' || '*failed*' }}."
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "> <${{ github.event.head_commit.url }} | `${{ steps.vars.outputs.sha_short }}`> ${{ steps.vars.outputs.subject }}\n> by *${{ github.event.head_commit.author.name }}*"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_FE_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
