@@ -1,9 +1,6 @@
 name: req-check
-run-name: on Pull Rikuest
 
-on: 
-  pull_request:
-    types: [edited]
+on: [workflow_call]
 
 jobs:
   unit-tests:

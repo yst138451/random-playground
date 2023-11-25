@@ -1,5 +1,4 @@
 name: deploy child
-run-name: deploy "Nama Lari"
 
 on:
   push:
