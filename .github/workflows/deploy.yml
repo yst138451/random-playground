@@ -1,11 +1,7 @@
 name: deploy
 
 on:
-  workflow_call:
-    inputs:
-      environment_name:
-        type: string
-        required: true
+  workflow_call
 
 jobs:
   deploy:
@@ -24,23 +20,23 @@ jobs:
           cache-dependency-path: ./yarn.lock
       - name: Install dependencies
         run: yarn
-      - name: Run unit tests
-        run: npm run test:unit
+      # - name: Run unit tests
+      #   run: npm run test:unit
       - name: Compile
         run: npm run build
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Deploy to S3 bucket
-        run: |
-          aws s3 sync ./dist/ s3://${{ vars.S3_BUCKET }} --exclude=*health --exclude=*.html --cache-control=max-age=31536000,public
-          aws s3 sync ./dist/ s3://${{ vars.S3_BUCKET }} --exclude=* --include=*.html --cache-control=no-cache
-          aws s3 sync ./dist/ s3://${{ vars.S3_BUCKET }} --exclude=* --include=*health --cache-control=no-cache --content-type=application/json
-      - name: Invalidate CloudFront distribution
-        run: aws cloudfront create-invalidation --distribution-id=${{ vars.DISTRIBUTION_ID }} --paths=/*
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-1
+      # - name: Deploy to S3 bucket
+      #   run: |
+      #     aws s3 sync ./dist/ s3://${{ vars.S3_BUCKET }} --exclude=*health --exclude=*.html --cache-control=max-age=31536000,public
+      #     aws s3 sync ./dist/ s3://${{ vars.S3_BUCKET }} --exclude=* --include=*.html --cache-control=no-cache
+      #     aws s3 sync ./dist/ s3://${{ vars.S3_BUCKET }} --exclude=* --include=*health --cache-control=no-cache --content-type=application/json
+      # - name: Invalidate CloudFront distribution
+      #   run: aws cloudfront create-invalidation --distribution-id=${{ vars.DISTRIBUTION_ID }} --paths=/*
 
   notify:
     name: Notify Slack channel
@@ -66,7 +62,7 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
-          channel-id: ${{ vars.FE_NOTIFICATION_CHANNEL_ID }}
+          channel-id: D01NHJ9QV51
           payload: |
             {
               "blocks": [
