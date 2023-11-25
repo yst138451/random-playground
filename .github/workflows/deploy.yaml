@@ -4,8 +4,11 @@ on:
   workflow_call
 
 jobs:
+  preparations:
+    uses: ./.github/workflows/validations.yaml
+    
   deploy:
-    needs: ./.github/workflows/validations.yaml
+    needs: preparations
     runs-on: ubuntu-latest
     # environment: ${{ inputs.environment_name }}
     # timeout-minutes: 7
