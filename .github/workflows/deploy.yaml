@@ -5,7 +5,7 @@ on:
 
 jobs:
   deploy:
-    needs: ./.github/workflows/deploy.yaml
+    needs: ./.github/workflows/validations.yaml
     runs-on: ubuntu-latest
     # environment: ${{ inputs.environment_name }}
     # timeout-minutes: 7
