@@ -12,11 +12,11 @@ jobs:
           node-version: '18'
           cache: yarn
           cache-dependency-path: ./yarn.lock
-      - name: Install dependencies
-        run: yarn
       - name: Run unit tests
-        run: yarn test:unit
-  
+        run: |
+          yarn
+          yarn test:unit
+
   deploy:
     needs: unit-tests
     uses: ./.github/workflows/deploy.yaml
