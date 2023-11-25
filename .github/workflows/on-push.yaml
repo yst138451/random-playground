@@ -15,9 +15,10 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Run unit tests
-        run: npm run test:unit
+        run: yarn test:unit
   
   deploy:
     needs: unit-tests
+    if: always() && !cancelled()
     uses: ./.github/workflows/deploy.yaml
     secrets: inherit
