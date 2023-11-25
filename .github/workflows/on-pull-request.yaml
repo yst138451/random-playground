@@ -1,0 +1,21 @@
+name: req-check
+run-name: on Pull Rikuest
+
+on: 
+  pull_request:
+    types: [review_requested]
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: yarn
+          cache-dependency-path: ./yarn.lock
+      - name: Run unit tests
+        run: |
+          yarn
+          yarn test:unit
