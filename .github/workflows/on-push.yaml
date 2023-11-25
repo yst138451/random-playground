@@ -18,5 +18,6 @@ jobs:
         run: npm run test:unit
   
   deploy:
+    needs: unit-tests
     uses: ./.github/workflows/deploy.yaml
     secrets: inherit
