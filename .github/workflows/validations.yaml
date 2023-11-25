@@ -14,5 +14,6 @@ jobs:
           cache-dependency-path: ./yarn.lock
       - name: Run unit tests
         run: |
+          echo "Node $(node -v)"
           yarn
           yarn test:unit
