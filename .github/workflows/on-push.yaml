@@ -1,0 +1,12 @@
+name: deploy child
+run-name: deploy "Nama Lari"
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    uses: .github/workflows/deploy.yaml
+    secret: inherit
