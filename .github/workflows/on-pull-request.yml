@@ -32,4 +32,4 @@ jobs:
       - name: Validations
         uses: ./.github/actions/validations
         with:
-          env: steps.getEnv.outputs.env
+          env: ${{ steps.getEnv.outputs.env }}
