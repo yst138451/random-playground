@@ -15,7 +15,7 @@ jobs:
       - name: Validations
         uses: ./.github/actions/validations
         with:
-          clean-install: true
+          clean-install: false
       - name: Compile
         run: yarn build
       # - name: Configure AWS credentials
