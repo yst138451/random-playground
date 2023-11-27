@@ -12,10 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          echo "OTONG=123"
-      # - name: Dump GitHub context
-      #   env:
-      #     GITHUB_CONTEXT: ${{ toJson(github) }}
-      #   run: echo "$GITHUB_CONTEXT"
+        base_branch=${{ github.base_ref }}
+
+        if [[ $base_branch == 'develop' ]]; then
+          env=dev
+        elif [[ $base_branch == release/* ]]; then
+          env=test
+        elif [[ $base_branch == hotfix/* ]]; then
+          env=staging
+        elif [[ $base_branch == 'feat' ]]; then
+          env=feat
+        fi
       - name: Validations
         uses: ./.github/actions/validations
