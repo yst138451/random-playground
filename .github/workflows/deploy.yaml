@@ -5,7 +5,6 @@ on:
 
 jobs:
   deploy:
-    needs: preparations
     runs-on: ubuntu-latest
     # environment: ${{ inputs.environment_name }}
     # timeout-minutes: 7
