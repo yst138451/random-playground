@@ -1,34 +1,12 @@
 name: Validations
 on:
   pull_request:
-  push:
-    # branches:
-    #   - JWC-*
-    #   - jwc-*
 
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - id: getEnv # Make this a javascript action instead
-        run: |
-          base_branch=${{ github.base_ref }}
-
-          if [[ $base_branch == 'develop' ]]; then
-            env=dev
-          elif [[ $base_branch == release/* ]]; then
-            env=test
-          elif [[ $base_branch == hotfix/* ]]; then
-            env=staging
-          elif [[ $base_branch == 'feat' ]]; then
-            env=feat
-          fi
-          echo "env=$env" >> $GITHUB_OUTPUT
       - name: Validations
         uses: ./.github/actions/validations
         with:
