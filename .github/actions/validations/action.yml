@@ -5,6 +5,8 @@ inputs:
     description: The Node version to use
     required: true
     default: '18'
+  env:
+    description: Environment name
 
 runs:
   using: composite
@@ -15,7 +17,9 @@ runs:
         cache: yarn
         cache-dependency-path: ./yarn.lock
     - shell: bash
+      env:
+        ENV: ${{ inputs.env }}
       run: |
-        echo "$env"
+        echo "$ENV"
         yarn 
         yarn test:unit

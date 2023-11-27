@@ -15,7 +15,8 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-      - run: |
+      - id: getEnv # Make this a javascript action instead
+        run: |
           base_branch=${{ github.base_ref }}
 
           if [[ $base_branch == 'develop' ]]; then
@@ -27,5 +28,8 @@ jobs:
           elif [[ $base_branch == 'feat' ]]; then
             env=feat
           fi
+          echo "env=$env" >> $GITHUB_OUTPUT
       - name: Validations
         uses: ./.github/actions/validations
+        with:
+          env: steps.getEnv.outputs.env
