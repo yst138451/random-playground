@@ -18,9 +18,8 @@ runs:
         cache: yarn
         cache-dependency-path: ./yarn.lock
     - shell: bash
-      if: inputs.clean-install == 'true'
       run: |
-        yarn
-    - shell: bash
-      run: |
+        if [ ${{ inputs.clean-install }} == 'true' ]; then
+          yarn
+        fi
         yarn test:unit
