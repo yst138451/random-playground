@@ -5,11 +5,6 @@ jobs:
   unit-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump GitHub vars
-        env:
-          GITHUB_VARS: ${{ toJson(vars) }}
-        run: echo "VARS --> $GITHUB_VARS"
       - uses: actions/checkout@v3
       - name: Validations
         uses: ./.github/actions/validations
-    secrets: inherit
