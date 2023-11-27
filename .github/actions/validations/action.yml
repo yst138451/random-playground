@@ -16,6 +16,5 @@ runs:
         cache-dependency-path: ./yarn.lock
     - shell: bash
       run: |
-        echo "Node $(node -v)"
         yarn
         yarn test:unit
