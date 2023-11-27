@@ -14,6 +14,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Validations
         uses: ./.github/actions/validations
+        with:
+          clean-install: false
       - name: Compile
         run: yarn build
       # - name: Configure AWS credentials
