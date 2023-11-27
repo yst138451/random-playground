@@ -19,8 +19,7 @@ jobs:
           node-version: '18'
           cache: yarn
           cache-dependency-path: ./yarn.lock
-          
-      - uses: ./.github/workflows/validations.yaml
+      - uses: ./.github/actions/validations
       # - name: Install dependencies
       #   run: yarn
       # - name: Run unit tests

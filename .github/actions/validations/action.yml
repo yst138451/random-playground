@@ -1,0 +1,12 @@
+name: Validations
+description: Unit tests and other validations
+
+runs:
+  using: composite
+  steps:
+    - name: Run unit tests
+      shell: bash
+      run: |
+        echo "Node $(node -v)"
+        yarn
+        yarn test:unit
