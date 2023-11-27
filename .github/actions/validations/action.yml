@@ -16,5 +16,6 @@ runs:
         cache-dependency-path: ./yarn.lock
     - shell: bash
       run: |
-        yarn $(echo "$OTONG") 
+        echo "$OTONG"
+        yarn 
         yarn test:unit
