@@ -1,11 +1,20 @@
 name: Validations
 description: Unit tests and other validations
+inputs:
+  node-version:
+    description: The Node version to use
+    required: true
+    default: '18'
 
 runs:
   using: composite
   steps:
-    - name: Run unit tests
-      shell: bash
+    - uses: actions/setup-node@v3
+      with:
+        node-version: inputs.node-version
+        cache: yarn
+        cache-dependency-path: ./yarn.lock
+    - shell: bash
       run: |
         echo "Node $(node -v)"
         yarn

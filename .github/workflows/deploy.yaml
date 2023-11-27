@@ -1,7 +1,6 @@
 name: deploy
 
-on:
-  workflow_call
+on: workflow_call
 
 jobs:
   deploy:
@@ -13,17 +12,8 @@ jobs:
     #   ENV: ${{ vars.ENV }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          cache: yarn
-          cache-dependency-path: ./yarn.lock
-      - uses: ./.github/actions/validations
-      # - name: Install dependencies
-      #   run: yarn
-      # - name: Run unit tests
-      #   run: yarn test:unit
-
+      - name: Validations
+        uses: ./.github/actions/validations
       - name: Compile
         run: yarn build
       # - name: Configure AWS credentials

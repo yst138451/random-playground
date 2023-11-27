@@ -1,0 +1,10 @@
+name: Validations
+on: [push]
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validations
+        uses: ./.github/actions/validations
