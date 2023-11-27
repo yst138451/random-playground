@@ -5,6 +5,9 @@ inputs:
     description: The Node version to use
     required: true
     default: '18'
+  clean-install:
+    description: Clean install
+    default: 'true'
 
 runs:
   using: composite
@@ -16,5 +19,6 @@ runs:
         cache-dependency-path: ./yarn.lock
     - shell: bash
       run: |
+        echo "$(inputs)"
         yarn
         yarn test:unit
