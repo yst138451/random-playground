@@ -19,6 +19,6 @@ runs:
         cache-dependency-path: ./yarn.lock
     - shell: bash
       run: |
-        echo "$(inputs)"
+        echo "${{ toJson(inputs) }}"
         yarn
         yarn test:unit
