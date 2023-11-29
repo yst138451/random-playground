@@ -1,10 +1,6 @@
 name: Validations
 on:
   pull_request:
-  push:
-    # branches:
-    #   - JWC-*
-    #   - jwc-*
 
 jobs:
   unit-tests:
