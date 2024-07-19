@@ -3,12 +3,15 @@ name: Unit tests
 on:
   pull_request:
     types: [synchronize, opened, reopened]
-    branches: 
+    branches:
       - develop
       - 'jwc-**'
       - 'JWC-**'
-    branches-ignore:
-      - somebranch-*
+
+permissions:
+  checks: write
+  contents: write
+  pull-requests: write
 
 jobs:
   get-env:
