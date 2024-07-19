@@ -40,7 +40,7 @@ jobs:
             # needs to be whitespace-delimited
             alt: organisation
           - component: Common
-            exclude: "'{**/dashboard/**,**/reports/**,**/account/**}'"
+            exclude: '{**/dashboard/**,**/reports/**,**/account/**}'
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/unit-tests
