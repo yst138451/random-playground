@@ -1,0 +1,37 @@
+name: Get Environment Name
+
+inputs:
+  prefix:
+    description: Prefix to prepend the resulting env with
+    required: false
+    default: ''
+
+outputs:
+  env:
+    description: Environment name
+    value: ${{ steps.getEnv.outputs.env }}
+
+runs:
+  using: composite
+  steps:
+    - id: getEnv
+      shell: bash
+      run: |
+        base_branch=${{ github.event_name == 'push' && github.ref_name || github.event.pull_request.base.ref }}
+
+        if [[ $base_branch == 'develop' ]]; then
+          env=dev
+        elif [[ $base_branch == release/* ]]; then
+          env=test
+        elif [[ $base_branch == hotfix/* ]]; then
+          env=staging
+        elif [[ $base_branch == 'feat' ]]; then
+          env=feat
+        else
+          exit 1
+        fi
+
+        prefix="${{ inputs.prefix }}"
+        prefixed_env="${prefix}${env}"
+
+        echo "env=$prefixed_env" >> $GITHUB_OUTPUT
