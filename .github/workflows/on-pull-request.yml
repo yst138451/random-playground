@@ -1,8 +1,9 @@
 name: Unit tests
 
 on:
-  pull_request:
-    types: [synchronize, opened, reopened]
+  push:
+  # pull_request:
+  #   types: [synchronize, opened, reopened]
     branches-ignore:
       - somebranch-*
 
@@ -21,7 +22,7 @@ jobs:
   test:
     needs: get-env
     runs-on: ubuntu-latest
-    # environment: ${{ needs.get-env.outputs.env  }}
+    environment: ${{ needs.get-env.outputs.env  }}
     env:
       APP: ${{ vars.APP }}
       ENV: ${{ vars.ENV }}
