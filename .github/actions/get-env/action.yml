@@ -31,5 +31,5 @@ runs:
           exit 1
         fi
 
-        prefix='yom-'
-        echo 'env=${prefix}${env}' >> $GITHUB_OUTPUT
+        prefixed_env='yom-${env}'
+        echo 'env=$prefixed_env' >> $GITHUB_OUTPUT
