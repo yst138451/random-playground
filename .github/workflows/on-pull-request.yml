@@ -32,15 +32,15 @@ jobs:
         component:
           - Dashboard
           - Reports
-          - Locations
           - Account
           - Common
+          - Organization
         include:
           - component: Organization
             # needs to be whitespace-delimited
             alt: organisation
           - component: Common
-            exclude: '{**/dashboard/**,**/locations/**,**/reports/**,**/account/**}'
+            exclude: '{**/dashboard/**,**/reports/**,**/account/**}'
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/unit-tests
