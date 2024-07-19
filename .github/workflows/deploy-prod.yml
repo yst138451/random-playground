@@ -5,10 +5,8 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        type: choice
+        type: environment
         required: true
-        options:
-          - yom-prod
         default: yom-prod
 
 jobs:
