@@ -32,4 +32,4 @@ runs:
         fi
 
         prefix='yom-'
-        echo 'env=$prefix$env' >> $GITHUB_OUTPUT
+        echo 'env=${prefix}${env}' >> $GITHUB_OUTPUT
