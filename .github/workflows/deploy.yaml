@@ -10,10 +10,11 @@ on:
     inputs:
       environment_name:
         type: string
-        required: false
+        required: true
 
 jobs:
   get-env:
+    if: github.event_name != 'workflow_call'
     runs-on: ubuntu-latest
     outputs:
       env: ${{ steps.getEnv.outputs.env }}
