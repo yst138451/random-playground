@@ -3,10 +3,17 @@ run-name: ${{ startsWith(github.ref, 'refs/heads/release') && 'New version relea
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        required: true
+        options:
+          - yom-prod
+        default: yom-prod
 
 jobs:
   deploy:
     uses: ./.github/workflows/deploy.yaml
     with:
-      environment_name: yom-prod
+      environment_name: ${{ inputs.environment }}
     secrets: inherit

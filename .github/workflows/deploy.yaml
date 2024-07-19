@@ -35,6 +35,11 @@ jobs:
       APP: ${{ vars.APP }}
       ENV: ${{ vars.ENV }}
     steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
       - uses: actions/checkout@v4
       - uses: ./.github/actions/unit-tests
         continue-on-error: false
