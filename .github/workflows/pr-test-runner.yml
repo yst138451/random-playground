@@ -26,10 +26,9 @@ jobs:
           - component: Organization
             alt: organisation
           - component: Common
-            args: "--exclude='{**/dashboard/**,**/reports/**,**/account/**}'"
+            args: --exclude='{**/dashboard/**,**/reports/**,**/account/**}'
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/unit-tests
         with:
-          component: ${{ matrix.component }} ${{ matrix.alt }}
-          args: ${{ matrix.args }}
+          component: ${{ matrix.component }} ${{ matrix.alt }} ${{ matrix.args }}
