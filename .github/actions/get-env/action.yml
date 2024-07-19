@@ -25,8 +25,6 @@ runs:
           env=test
         elif [[ $base_branch == hotfix/* ]]; then
           env=staging
-        elif [[ $base_branch == 'feat' ]]; then
-          env=feat
         else
           exit 1
         fi
