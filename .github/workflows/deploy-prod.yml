@@ -1,12 +1,14 @@
-name: Manual deployment
+name: Manual prod deployment
 run-name: ${{ startsWith(github.ref, 'refs/heads/release') && 'New version release' || 'Hotfix release' }}
 
 on:
   workflow_dispatch:
     inputs:
       environment:
-        type: environment
+        type: choice
         required: true
+        options:
+          - yom-prod
         default: yom-prod
 
 jobs:
