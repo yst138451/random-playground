@@ -1,0 +1,12 @@
+name: Manual deployment
+run-name: ${{ startsWith(github.ref, 'refs/heads/release') && 'New version release' || 'Hotfix release' }}
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      environment_name: yom-prod
+    secrets: inherit
