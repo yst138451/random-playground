@@ -19,7 +19,7 @@ runs:
         yarn install --frozen-lockfile
 
         if [ -n "${{ inputs.exclusion }}" ]; then
-          yarn test --silent --hideSkippedTests --run --exclude '${{ inputs.exclusion }}'
+          yarn test --silent --hideSkippedTests --run --exclude ${{ inputs.exclusion }}
         else
           yarn test --silent --hideSkippedTests --run ${{ inputs.component }}
         fi
