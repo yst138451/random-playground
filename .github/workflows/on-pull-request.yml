@@ -1,28 +1,27 @@
 name: Unit tests
 
 on:
-  push:
-  # pull_request:
-  #   types: [synchronize, opened, reopened]
+  pull_request:
+    types: [synchronize, opened, reopened]
     branches-ignore:
       - somebranch-*
 
 jobs:
-  # get-env:
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     env: ${{ steps.getEnv.outputs.env }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - id: getEnv
-  #       uses: ./.github/actions/get-env
-  #       with:
-  #         prefix: 'yom-'
+  get-env:
+    runs-on: ubuntu-latest
+    outputs:
+      env: ${{ steps.getEnv.outputs.env }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: getEnv
+        uses: ./.github/actions/get-env
+        with:
+          prefix: 'yom-'
 
   test:
-    # needs: get-env
+    needs: get-env
     runs-on: ubuntu-latest
-    environment: yom-dev # ${{ needs.get-env.outputs.env  }}
+    environment: ${{ needs.get-env.outputs.env  }}
     env:
       APP: ${{ vars.APP }}
       ENV: ${{ vars.ENV }}
