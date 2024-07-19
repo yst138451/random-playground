@@ -15,6 +15,7 @@ on:
 jobs:
   get-env:
     if: github.event_name != 'workflow_call'
+    name: Get environment name
     runs-on: ubuntu-latest
     outputs:
       env: ${{ steps.getEnv.outputs.env }}
@@ -30,9 +31,9 @@ jobs:
         with:
           prefix: 'yom-'
 
-  first-job:
+  build:
     needs: get-env
-    name: Initial Job
+    name: Build & deploy
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment_name || needs.get-env.outputs.env }}
     timeout-minutes: 7
