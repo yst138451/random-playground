@@ -1,12 +1,6 @@
 name: Get Environment Name
 description: Parse github context and return an environment name
 
-inputs:
-  prefix:
-    description: Prefix to prepend the resulting env with
-    required: false
-    default: ''
-
 outputs:
   env:
     description: Environment name
@@ -37,7 +31,5 @@ runs:
           exit 1
         fi
 
-        prefix='${{ inputs.prefix }}'
-        prefixed_env='${prefix}${env}'
-
-        echo 'env=$prefixed_env' >> $GITHUB_OUTPUT
+        prefix='yom-'
+        echo 'env=$prefix$env' >> $GITHUB_OUTPUT
