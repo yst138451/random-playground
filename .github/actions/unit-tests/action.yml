@@ -4,8 +4,8 @@ inputs:
   component:
     description: The name of the component to test
     required: false
-  exclusion:
-    description: Glob pattern to exclude tests
+  args:
+    description: Additional options
     required: false
 
 runs:
@@ -21,9 +21,4 @@ runs:
       shell: bash
       run: |
         yarn install --frozen-lockfile
-
-        if [ -n "${{ inputs.exclusion }}" ]; then
-          yarn test --silent --hideSkippedTests --run --exclude '${{ inputs.exclusion }}'
-        else
-          yarn test --silent --hideSkippedTests --run ${{ inputs.component }}
-        fi
+        yarn test --silent --hideSkippedTests --run ${{ inputs.component }} ${{ inputs.args }}

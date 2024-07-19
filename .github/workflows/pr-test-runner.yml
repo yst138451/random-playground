@@ -24,13 +24,12 @@ jobs:
           - Organization
         include:
           - component: Organization
-            # needs to be whitespace-delimited
             alt: organisation
           - component: Common
-            exclude: '{**/dashboard/**,**/reports/**,**/account/**}'
+            args: "--exclude='{**/dashboard/**,**/reports/**,**/account/**}'"
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/unit-tests
         with:
           component: ${{ matrix.component }} ${{ matrix.alt }}
-          exclusion: ${{ matrix.exclude }}
+          args: ${{ matrix.args }}
