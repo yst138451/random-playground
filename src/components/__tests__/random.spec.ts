@@ -1,4 +1,4 @@
-import  { describe, expect, test, vi } from 'vitest'
+import  { describe, expect, test } from 'vitest'
 import  { sum } from '../random'
 
 describe('sum module', () => {
