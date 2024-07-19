@@ -4,18 +4,24 @@ inputs:
   component:
     description: The name of the component to test. Can be whitespace-delimited to include more items
     required: false
+  exclusion:
+    description: Glob pattern to exclude tests
+    required: false
 
 runs:
   using: composite
   steps:
-    - name: Setup Nodejs
-      uses: actions/setup-node@v4
+    - uses: actions/setup-node@v4
       with:
         node-version: 18
         cache: yarn
         cache-dependency-path: ./yarn.lock
-    - name: Install & run tests
-      shell: bash
+    - shell: bash
       run: |
         yarn install --frozen-lockfile
-        yarn test --silent --hideSkippedTests --run ${{ inputs.component }}
+
+        if [ -n "${{ inputs.exclusion }}" ]; then
+          yarn test --silent --hideSkippedTests --run --exclude='${{ inputs.exclusion }}'
+        else
+          yarn test --silent --hideSkippedTests --run ${{ inputs.component }}
+        fi
