@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set outputs
+      - name: Set variables
         id: vars
         run: |
           {
@@ -90,14 +90,14 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ steps.vars.outputs.status_icon }} <${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }} | ${{ github.workflow }} #${{ github.run_number}}> *${{ steps.vars.outputs.status_text }}*."
+                    "text": "${{ steps.vars.outputs.status_icon }} <${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}|${{ github.workflow }} #${{ github.run_number}}> *${{ steps.vars.outputs.status_text }}*."
                   }
                 },
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "> <${{ steps.vars.outputs.commit_url }} | `${{ steps.vars.outputs.sha_short }}`> ${{ steps.vars.outputs.subject }}\n> by *${{ steps.vars.outputs.actor }}*"
+                    "text": "> <${{ steps.vars.outputs.commit_url }}|`${{ steps.vars.outputs.sha_short }}`> ${{ steps.vars.outputs.subject }}\n> by *${{ steps.vars.outputs.actor }}*"
                   }
                 }
               ]
