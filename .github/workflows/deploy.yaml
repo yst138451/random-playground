@@ -72,10 +72,13 @@ jobs:
 
             if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
               echo "commit_url=${{ github.event.repository.html_url }}/commit/$sha_short"
+              echo "actor=${{ github.triggering_actor }}"
             else
               echo "commit_url=${{ github.event.head_commit.url }}"
+              echo "actor=${{ github.actor }}"
             fi
           } >> $GITHUB_OUTPUT
+
       - name: Notify Slack channel
         uses: slackapi/slack-github-action@v1.26.0
         with:
@@ -94,7 +97,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "> <${{ steps.vars.outputs.commit_url }} | `${{ steps.vars.outputs.sha_short }}`> ${{ steps.vars.outputs.subject }}\n> by *${{ github.event.head_commit.author.name }}*"
+                    "text": "> <${{ steps.vars.outputs.commit_url }} | `${{ steps.vars.outputs.sha_short }}`> ${{ steps.vars.outputs.subject }}\n> by *${{ steps.vars.outputs.actor }}*"
                   }
                 }
               ]
