@@ -58,7 +58,8 @@ jobs:
         id: vars
         run: |
           {
-            echo "sha_short=$(git rev-parse --short HEAD)"
+            sha_short=$(git rev-parse --short HEAD)
+            echo "sha_short=$sha_short"
             echo "subject=$(git log --format=%s -n 1 HEAD)"
 
             if [ "${{ needs.build.result }}" == "success" ]; then
@@ -67,6 +68,12 @@ jobs:
             else
               echo "status_icon=:no_entry:"
               echo "status_text=failed"
+            fi
+
+            if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+              echo "commit_url=${{ github.event.repository.html_url }}/commit/$sha_short"
+            else
+              echo "commit_url=${{ github.event.head_commit.url }}"
             fi
           } >> $GITHUB_OUTPUT
       - name: Notify Slack channel
@@ -87,7 +94,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "> <${{ github.event.head_commit.url }} | `${{ steps.vars.outputs.sha_short }}`> ${{ steps.vars.outputs.subject }}\n> by *${{ github.event.head_commit.author.name }}*"
+                    "text": "> <${{ steps.vars.outputs.commit_url }} | `${{ steps.vars.outputs.sha_short }}`> ${{ steps.vars.outputs.subject }}\n> by *${{ github.event.head_commit.author.name }}*"
                   }
                 }
               ]
