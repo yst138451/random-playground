@@ -53,17 +53,20 @@ jobs:
     if: always() && !cancelled()
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set outputs
         id: vars
         run: |
-          {
-            echo "sha_short=$(git rev-parse --short HEAD)"
-            echo "subject=$(git log --format=%s -n 1 HEAD)"
-          } >> $GITHUB_OUTPUT
-
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "subject=$(git log --format=%s -n 1 HEAD)" >> $GITHUB_OUTPUT
+          if [ "${{ needs.build.result }}" == "success" ]; then
+            echo "status_icon=:white_check_mark:" >> $GITHUB_OUTPUT
+            echo "status_text=succeeded" >> $GITHUB_OUTPUT
+          else
+            echo "status_icon=:no_entry:" >> $GITHUB_OUTPUT
+            echo "status_text=failed" >> $GITHUB_OUTPUT
+          fi
       - name: Notify Slack channel
-        id: slack
         uses: slackapi/slack-github-action@v1.26.0
         with:
           channel-id: D01NHJ9QV51 # yom private DM
@@ -74,7 +77,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ needs.build.result == 'success' && ':white_check_mark:' || ':no_entry:' }} <${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }} | ${{ github.workflow }} #${{github.run_number}}> ${{ needs.build.result == 'success' && '*succeeded*' || '*failed*' }}."
+                    "text": "${{ steps.vars.outputs.status_icon }} <${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }} | ${{ github.workflow }} #${{ github.run_number}}> *${{ steps.vars.outputs.status_text }}*."
                   }
                 },
                 {
