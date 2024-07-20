@@ -57,15 +57,18 @@ jobs:
       - name: Set outputs
         id: vars
         run: |
-          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-          echo "subject=$(git log --format=%s -n 1 HEAD)" >> $GITHUB_OUTPUT
-          if [ "${{ needs.build.result }}" == "success" ]; then
-            echo "status_icon=:white_check_mark:" >> $GITHUB_OUTPUT
-            echo "status_text=succeeded" >> $GITHUB_OUTPUT
-          else
-            echo "status_icon=:no_entry:" >> $GITHUB_OUTPUT
-            echo "status_text=failed" >> $GITHUB_OUTPUT
-          fi
+          {
+            echo "sha_short=$(git rev-parse --short HEAD)"
+            echo "subject=$(git log --format=%s -n 1 HEAD)"
+
+            if [ "${{ needs.build.result }}" == "success" ]; then
+              echo "status_icon=:white_check_mark:"
+              echo "status_text=succeeded"
+            else
+              echo "status_icon=:no_entry:"
+              echo "status_text=failed"
+            fi
+          } >> $GITHUB_OUTPUT
       - name: Notify Slack channel
         uses: slackapi/slack-github-action@v1.26.0
         with:
